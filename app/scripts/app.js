@@ -21,7 +21,7 @@ define(['jquery', 'async!http://maps.google.com/maps/api/js?sensor=false'],
 
 	var createPano = function(){
 	    var panoramaOptions = {
-	        position: latlng,
+	    	pano: 'thesquare',
 	        panoProvider:  getCustomPanorama,
 	        visible: true
 	    };
@@ -31,20 +31,20 @@ define(['jquery', 'async!http://maps.google.com/maps/api/js?sensor=false'],
 
 	var getCustomPanorama = function(pano) {
       switch(pano) {
-        case 'reception':
+        case 'thesquare':
           return {
             location: {
-              pano: 'reception',
-              description: 'Google Sydney - Reception',
+              pano: 'thesquare',
+              description: 'Bournemouth - The Square',
               latLng: new google.maps.LatLng(-33.86684, 151.19583)
             },
             links: [],
             // The text for the copyright control.
-            copyright: 'Imagery (c) 2010 Google',
+            copyright: 'Imagery (c) 2013 Flickr',
             // The definition of the tiles for this panorama.
             tiles: {
-              tileSize: new google.maps.Size(1024, 512),
-              worldSize: new google.maps.Size(2048, 1024),
+              tileSize: new google.maps.Size(512, 512),
+              worldSize: new google.maps.Size(4096, 2048),
               // The heading at the origin of the panorama tile set.
               centerHeading: 105,
               getTileUrl: getCustomPanoramaTileUrl
@@ -55,6 +55,13 @@ define(['jquery', 'async!http://maps.google.com/maps/api/js?sensor=false'],
           return null;
       }
     };
+
+    var getCustomPanoramaTileUrl = function(pano, zoom, tileX, tileY) {
+	  // Return a pano image given the panoID.
+	  var imagepath = 'images/thesquare-' + zoom + '-' + tileX + '-' +tileY +
+	      '.jpg';
+	  return imagepath;
+	}
 
     return {
 
