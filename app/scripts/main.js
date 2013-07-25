@@ -17,10 +17,11 @@ require(['app', 'jquery', 'bootstrap', 'async!http://maps.google.com/maps/api/js
 
     var latlng = new google.maps.LatLng(50.720081,-1.879894),
         mapDiv = document.getElementById('map-canvas');
+    var sydneyOffice = new google.maps.LatLng(-33.867386, 151.195767);
 
     var map = new google.maps.Map(mapDiv, {
         center: latlng,
-        zoom: 18,
+        zoom: 16,
         mapTypeId: google.maps.MapTypeId.ROADMAP,
         navigationControl: true,
         navigationControlOptions: {
@@ -30,11 +31,40 @@ require(['app', 'jquery', 'bootstrap', 'async!http://maps.google.com/maps/api/js
 
     var panoramaOptions = {
         position: latlng,
-        pov: {
-          heading: 34,
-          pitch: 10
-        }
+        panoProvider:  getCustomPanorama,
+        visible: true
     };
-    var panorama = new  google.maps.StreetViewPanorama(document.getElementById('pano'),panoramaOptions);
-    map.setStreetView(panorama);
+    var panorama = map.getStreetView();
+    panorama.setOptions(panoramaOptions);
+
+
+    function getCustomPanorama(pano) {
+      switch(pano) {
+        case 'reception':
+          return {
+            location: {
+              pano: 'reception',
+              description: 'Google Sydney - Reception',
+              latLng: new google.maps.LatLng(-33.86684, 151.19583)
+            },
+            links: [],
+            // The text for the copyright control.
+            copyright: 'Imagery (c) 2010 Google',
+            // The definition of the tiles for this panorama.
+            tiles: {
+              tileSize: new google.maps.Size(1024, 512),
+              worldSize: new google.maps.Size(2048, 1024),
+              // The heading at the origin of the panorama tile set.
+              centerHeading: 105,
+              getTileUrl: getCustomPanoramaTileUrl
+            }
+          };
+          break;
+        default:
+          return null;
+      }
+    }
+
+
+
 });
